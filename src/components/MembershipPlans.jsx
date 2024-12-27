@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from './ui/button';
+import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 const plans = [
   {
@@ -17,26 +18,85 @@ const plans = [
     price: '$79.99',
     features: ['All Premium features', 'Unlimited personal training', 'Nutrition consultation'],
   },
+  {
+    name: 'Student',
+    price: '$19.99',
+    features: ['Access to gym equipment', 'Locker room access', 'Discounted group classes'],
+  },
+  {
+    name: 'Family',
+    price: '$99.99',
+    features: ['Access for up to 4 family members', 'All Premium features', 'Childcare services'],
+  },
+  {
+    name: 'Corporate',
+    price: '$59.99',
+    features: ['All Premium features', 'Team building sessions', 'Workplace wellness programs'],
+  },
 ];
 
 function MembershipPlans() {
+  const [startIndex, setStartIndex] = useState(0);
+  const visiblePlans = 3;
+
+  const nextSlide = () => {
+    setStartIndex((prevIndex) => 
+      (prevIndex + 1) % (plans.length - visiblePlans + 1)
+    );
+  };
+
+  const prevSlide = () => {
+    setStartIndex((prevIndex) => 
+      (prevIndex - 1 + (plans.length - visiblePlans + 1)) % 
+      (plans.length - visiblePlans + 1)
+    );
+  };
+
   return (
     <section className="py-16 bg-gray-900">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-8 text-center">Membership Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
-            <div key={index} className="bg-gray-800 rounded-lg p-8 shadow-lg">
-              <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
-              <p className="text-4xl font-bold mb-6">{plan.price}<span className="text-sm">/month</span></p>
-              <ul className="mb-8">
-                {plan.features.map((feature, i) => (
-                  <li key={i} className="mb-2">✓ {feature}</li>
-                ))}
-              </ul>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700">Choose Plan</Button>
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">Membership Plans</h2>
+        <div className="relative">
+          <button 
+            onClick={prevSlide} 
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10"
+            aria-label="Previous plans"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button 
+            onClick={nextSlide} 
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10"
+            aria-label="Next plans"
+          >
+            <ChevronRight size={24} />
+          </button>
+          <div className="overflow-hidden">
+            <div 
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${startIndex * (100 / visiblePlans)}%)` }}
+            >
+              {plans.map((plan, index) => (
+                <div key={index} className="flex-none w-1/3 px-4">
+                  <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
+                    <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
+                    <p className="text-4xl font-bold mb-6 text-purple-500">{plan.price}<span className="text-sm text-gray-400">/month</span></p>
+                    <ul className="mb-8 flex-grow">
+                      {plan.features.map((feature, i) => (
+                        <li key={i} className="mb-2 flex items-center text-gray-300">
+                          <Check className="h-5 w-5 text-green-500 mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                      Choose Plan
+                    </Button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
@@ -44,4 +104,3 @@ function MembershipPlans() {
 }
 
 export default MembershipPlans;
-

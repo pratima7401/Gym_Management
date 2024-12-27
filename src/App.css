@@ -1,10 +1,24 @@
-
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
 body {
   background-color: #1a202c;
+   /* Background Image */
+   /* background-image: url('assets/Gym_bg.jpg'); Replace with your image path
+   background-size: cover; Ensure the image covers the entire viewport
+   background-position: center center; Center the image */
+   /* background-repeat: no-repeat; Prevent the image from repeating */
+
+   
+   /* Optional: Color overlay (for opacity effect) */
+   /* background-color: rgba(24, 32, 44, 0.7);  */
   color: #fff;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 
