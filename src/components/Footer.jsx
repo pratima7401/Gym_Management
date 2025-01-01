@@ -5,8 +5,8 @@ import { MapPin } from 'lucide-react'; // Add the location icon
 
 function Footer() {
   return (
-    <footer className="bg-gray-800 py-8">
-      <div className="container mx-auto text-center">
+    <footer className="bg-gray-900 bg-opacity-75 py-8">
+      <div className="container mx-auto  justify-between text-center">
         {/* Social Media Links */}
         <div className="flex justify-center space-x-6 mb-4">
           <Link to="#" className="text-blue-500 hover:text-blue-800 transition-colors">
@@ -30,6 +30,9 @@ function Footer() {
       {/* Copyright */}
       <div className="mt-4 border-t border-gray-700 pt-4 text-center text-gray-400">
         <p>&copy; 2024 FitForge. All rights reserved to Pratima Palande.</p>
+      </div>
+      <div className="container mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+        <p>&copy; {new Date().getFullYear()} FitForge. All rights reserved.</p>
       </div>
     </footer>
   );
