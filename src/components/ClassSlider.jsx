@@ -1,4 +1,3 @@
-// Array of class data
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import YogaImage from "../assets/yoga.jpg";
@@ -58,7 +57,7 @@ function ClassSlider() {
   const prevSlide = () => {
     setStartIndex(
       (prevIndex) =>
-        (prevIndex - 1 + (classes.length - visibleClasses + 1)) %
+        (prevIndex - 1 + (classes.length - visibleClasses + 1)) % 
         (classes.length - visibleClasses + 1)
     );
   };
@@ -90,11 +89,11 @@ function ClassSlider() {
             {/* Slider container */}
             <div
               className="flex transition-transform duration-300 ease-in-out"
-              style={{ transform: `translateX(-${startIndex * 25}%)` }}
+              style={{ transform: `translateX(-${startIndex * (100 / visibleClasses)}%)` }}
             >
               {/* Render class cards */}
               {classes.map((cls, index) => (
-                <div key={index} className="flex-none w-1/4 px-2">
+                <div key={index} className="flex-none w-full sm:w-1/2 md:w-1/4 px-2">
                   <div className="relative group overflow-hidden rounded-lg shadow-lg">
                     <img
                       src={cls.image}
@@ -120,4 +119,3 @@ function ClassSlider() {
 }
 
 export default ClassSlider;
-

@@ -1,4 +1,3 @@
-// Array of membership plan data
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
@@ -85,7 +84,7 @@ function MembershipPlans() {
             >
               {/* Render plan cards */}
               {plans.map((plan, index) => (
-                <div key={index} className="flex-none w-1/3 px-4">
+                <div key={index} className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4">
                   <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
                     <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
                     <p className="text-4xl font-bold mb-6 text-purple-400">{plan.price}<span className="text-sm text-gray-400">/month</span></p>
@@ -112,4 +111,3 @@ function MembershipPlans() {
 }
 
 export default MembershipPlans;
-
