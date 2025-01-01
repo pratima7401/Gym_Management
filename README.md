@@ -1,7 +1,7 @@
 
 # Gym_Management
 <<<<<<< HEAD
-This is my local README content.
+Gym Frontend Completed
 =======
 This is the remote README content.
 1st Jan 2025
