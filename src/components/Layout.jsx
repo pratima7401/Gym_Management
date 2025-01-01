@@ -1,12 +1,24 @@
-// Layout.js
+// Add the following comments:
 import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
 
+// Layout component to provide consistent structure across pages
 function Layout({ children }) {
   return (
-    <div className="container mx-auto px-4">
-      {children}
+    // Main container with dark theme
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      {/* Header component for navigation */}
+      <Header />
+      {/* Main content area */}
+      <main className="flex-grow">
+        {children}
+      </main>
+      {/* Footer component */}
+      <Footer />
     </div>
   );
 }
 
 export default Layout;
+

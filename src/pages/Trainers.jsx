@@ -129,7 +129,7 @@ function Trainers() {
               <h2 className="text-2xl font-bold mb-2">{trainer.name}</h2>
               <p className="text-purple-500 font-semibold mb-2">{trainer.specialty}</p>
               <p className="text-gray-400">{trainer.experience} of experience</p>
-              <p className="text-purple-500 font-bold mb-2">{trainer.certifications}</p>
+              <p className="text-gray-400">{trainer.certifications}</p>
             </div>
           </div>
         ))}

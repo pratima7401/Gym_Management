@@ -1,3 +1,4 @@
+// Array of membership plan data
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
@@ -36,15 +37,18 @@ const plans = [
 ];
 
 function MembershipPlans() {
+  // State to keep track of the first visible plan
   const [startIndex, setStartIndex] = useState(0);
   const visiblePlans = 3;
 
+  // Handler for next slide button
   const nextSlide = () => {
     setStartIndex((prevIndex) => 
       (prevIndex + 1) % (plans.length - visiblePlans + 1)
     );
   };
 
+  // Handler for previous slide button
   const prevSlide = () => {
     setStartIndex((prevIndex) => 
       (prevIndex - 1 + (plans.length - visiblePlans + 1)) % 
@@ -57,30 +61,34 @@ function MembershipPlans() {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">Membership Plans</h2>
         <div className="relative">
+          {/* Previous slide button */}
           <button 
             onClick={prevSlide} 
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
             aria-label="Previous plans"
           >
             <ChevronLeft size={24} />
           </button>
+          {/* Next slide button */}
           <button 
             onClick={nextSlide} 
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
             aria-label="Next plans"
           >
             <ChevronRight size={24} />
           </button>
           <div className="overflow-hidden">
+            {/* Slider container */}
             <div 
               className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${startIndex * (100 / visiblePlans)}%)` }}
             >
+              {/* Render plan cards */}
               {plans.map((plan, index) => (
                 <div key={index} className="flex-none w-1/3 px-4">
                   <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
                     <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
-                    <p className="text-4xl font-bold mb-6 text-purple-500">{plan.price}<span className="text-sm text-gray-400">/month</span></p>
+                    <p className="text-4xl font-bold mb-6 text-purple-400">{plan.price}<span className="text-sm text-gray-400">/month</span></p>
                     <ul className="mb-8 flex-grow">
                       {plan.features.map((feature, i) => (
                         <li key={i} className="mb-2 flex items-center text-gray-300">
@@ -104,3 +112,4 @@ function MembershipPlans() {
 }
 
 export default MembershipPlans;
+
