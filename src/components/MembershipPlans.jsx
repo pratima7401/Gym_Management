@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
@@ -36,23 +36,24 @@ const plans = [
 ];
 
 function MembershipPlans() {
-  // State to keep track of the first visible plan
   const [startIndex, setStartIndex] = useState(0);
   const visiblePlans = 3;
+  const totalPlans = plans.length;
 
-  // Handler for next slide button
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStartIndex((prevIndex) => (prevIndex + 1) % totalPlans);
+    }, 1000); // Change slide every 1 seconds
+
+    return () => clearInterval(timer);
+  }, []);
+
   const nextSlide = () => {
-    setStartIndex((prevIndex) => 
-      (prevIndex + 1) % (plans.length - visiblePlans + 1)
-    );
+    setStartIndex((prevIndex) => (prevIndex + 1) % totalPlans);
   };
 
-  // Handler for previous slide button
   const prevSlide = () => {
-    setStartIndex((prevIndex) => 
-      (prevIndex - 1 + (plans.length - visiblePlans + 1)) % 
-      (plans.length - visiblePlans + 1)
-    );
+    setStartIndex((prevIndex) => (prevIndex - 1 + totalPlans) % totalPlans);
   };
 
   return (
@@ -60,7 +61,6 @@ function MembershipPlans() {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">Membership Plans</h2>
         <div className="relative">
-          {/* Previous slide button */}
           <button 
             onClick={prevSlide} 
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
@@ -68,7 +68,6 @@ function MembershipPlans() {
           >
             <ChevronLeft size={24} />
           </button>
-          {/* Next slide button */}
           <button 
             onClick={nextSlide} 
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
@@ -77,13 +76,11 @@ function MembershipPlans() {
             <ChevronRight size={24} />
           </button>
           <div className="overflow-hidden">
-            {/* Slider container */}
             <div 
               className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${startIndex * (100 / visiblePlans)}%)` }}
             >
-              {/* Render plan cards */}
-              {plans.map((plan, index) => (
+              {[...plans, ...plans].map((plan, index) => (
                 <div key={index} className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4">
                   <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
                     <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
@@ -111,3 +108,4 @@ function MembershipPlans() {
 }
 
 export default MembershipPlans;
+

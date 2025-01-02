@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import YogaImage from "../assets/yoga.jpg";
 import ZumbaImage from "../assets/zumba.jpg";
@@ -15,8 +15,7 @@ const classes = [
   },
   {
     name: "Zumba",
-    description:
-      "A fun way to burn calories and improve cardiovascular health.",
+    description: "A fun way to burn calories and improve cardiovascular health.",
     image: ZumbaImage,
   },
   {
@@ -42,34 +41,33 @@ const classes = [
 ];
 
 function ClassSlider() {
-  // State to keep track of the first visible class
   const [startIndex, setStartIndex] = useState(0);
   const visibleClasses = 4;
+  const totalClasses = classes.length;
 
-  // Handler for next slide button
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStartIndex((prevIndex) => (prevIndex + 1) % totalClasses);
+    }, 1000); // Change slide every 1 seconds
+
+    return () => clearInterval(timer);
+  }, []);
+
   const nextSlide = () => {
-    setStartIndex(
-      (prevIndex) => (prevIndex + 1) % (classes.length - visibleClasses + 1)
-    );
+    setStartIndex((prevIndex) => (prevIndex + 1) % totalClasses);
   };
 
-  // Handler for previous slide button
   const prevSlide = () => {
-    setStartIndex(
-      (prevIndex) =>
-        (prevIndex - 1 + (classes.length - visibleClasses + 1)) % 
-        (classes.length - visibleClasses + 1)
-    );
+    setStartIndex((prevIndex) => (prevIndex - 1 + totalClasses) % totalClasses);
   };
 
   return (
-    <section className="py-16 bg-black-800">
+    <section className="py-16 bg-gray-800">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">
           Our Classes
         </h2>
         <div className="relative">
-          {/* Previous slide button */}
           <button
             onClick={prevSlide}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
@@ -77,7 +75,6 @@ function ClassSlider() {
           >
             <ChevronLeft size={24} />
           </button>
-          {/* Next slide button */}
           <button
             onClick={nextSlide}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
@@ -86,21 +83,18 @@ function ClassSlider() {
             <ChevronRight size={24} />
           </button>
           <div className="overflow-hidden">
-            {/* Slider container */}
             <div
               className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${startIndex * (100 / visibleClasses)}%)` }}
             >
-              {/* Render class cards */}
-              {classes.map((cls, index) => (
-                <div key={index} className="flex-none w-full sm:w-1/2 md:w-1/4 px-2">
+              {[...classes, ...classes].map((cls, index) => (
+                <div key={index} className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2">
                   <div className="relative group overflow-hidden rounded-lg shadow-lg">
                     <img
                       src={cls.image}
                       alt={cls.name}
                       className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                     />
-                    {/* Overlay with class details */}
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                       <p className="text-white text-xl font-bold">{cls.name}</p>
                       <p className="text-white text-sm mt-2">
@@ -119,3 +113,4 @@ function ClassSlider() {
 }
 
 export default ClassSlider;
+
