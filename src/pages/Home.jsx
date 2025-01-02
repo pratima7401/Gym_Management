@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import ClassSlider from '../components/ClassSlider';
 import MembershipPlans from '../components/MembershipPlans';
 import About from '../pages/About';
+import Contact from '../pages/Contact';
 
 function Home() {
   return (
@@ -11,6 +12,7 @@ function Home() {
       <ClassSlider />
       <About/>
       <MembershipPlans />
+      <Contact />
     </div>
   );
 }
