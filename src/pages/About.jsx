@@ -69,12 +69,11 @@ function About() {
                 <div className="flex justify-center mb-2">{stat.icon}</div>
                 <div className="text-3xl font-bold text-purple-400">
                   <CountUp 
-                    start={0} 
                     end={stat.value} 
-                    duration={2.5} 
-                    suffix={stat.suffix} 
-                    enableScrollSpy={true} 
-                    scrollSpyOnce={true} 
+                    duration={2.5}
+                    suffix={stat.suffix}
+                    enableScrollSpy
+                    scrollSpyOnce
                   />
                 </div>
                 <div className="text-gray-400">{stat.label}</div>
