@@ -201,65 +201,79 @@ function Shop() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Shop</h1>
-        <div className="flex items-center space-x-2">
-          <ShoppingCart className="h-6 w-6" />
-          <span className="bg-purple-600 text-white rounded-full px-2 py-1 text-sm">
-            {cartItems.length}
-          </span>
-        </div>
-      </div>
-
-      {/* Categories */}
-      <div className="flex flex-wrap gap-4 mb-8">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-full ${
-              selectedCategory === category
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
-          <div key={product.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-            <div className="relative group">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <Button 
-                  onClick={() => addToCart(product)}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  Add to Cart
-                </Button>
+    <div className="bg-gray-900 min-h-screen">
+      <div className="sticky top-0 z-40 bg-gray-900 shadow-md">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-4xl font-bold text-white">Shop</h1>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => {/* Add filter logic here */}}
+                className="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors"
+              >
+                <Filter className="h-5 w-5" />
+              </button>
+              <div className="relative">
+                <ShoppingCart className="h-6 w-6 text-white" />
+                <span className="absolute -top-2 -right-2 bg-purple-600 text-white rounded-full px-2 py-1 text-xs">
+                  {cartItems.length}
+                </span>
               </div>
-            </div>
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold">{product.name}</h3>
-                <span className="text-purple-500 font-bold">${product.price}</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-4">{product.description}</p>
-              <span className="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
-                {product.category}
-              </span>
             </div>
           </div>
-        ))}
+          <div className="container mx-auto px-4 pb-4">
+            <div className="flex flex-wrap gap-4">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full ${
+                    selectedCategory === category
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="container mx-auto px-4 py-8">
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+              <div className="relative group">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <Button 
+                    onClick={() => addToCart(product)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    Add to Cart
+                  </Button>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-bold">{product.name}</h3>
+                  <span className="text-purple-500 font-bold">${product.price}</span>
+                </div>
+                <p className="text-gray-400 text-sm mb-4">{product.description}</p>
+                <span className="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                  {product.category}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

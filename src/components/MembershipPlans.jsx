@@ -37,8 +37,24 @@ const plans = [
 
 function MembershipPlans() {
   const [startIndex, setStartIndex] = useState(0);
-  const visiblePlans = 3;
+  const [visiblePlans, setVisiblePlans] = useState(1);
   const totalPlans = plans.length;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisiblePlans(1);
+      } else if (window.innerWidth < 1024) {
+        setVisiblePlans(2);
+      } else {
+        setVisiblePlans(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,13 +91,13 @@ function MembershipPlans() {
           >
             <ChevronRight size={24} />
           </button>
-          <div className="overflow-hidden">
+          <div className="overflow-hidden w-full">
             <div 
-              className="flex transition-transform duration-300 ease-in-out"
+              className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${startIndex * (100 / visiblePlans)}%)` }}
             >
               {[...plans, ...plans].map((plan, index) => (
-                <div key={index} className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4">
+                <div key={index} className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4 mb-4">
                   <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
                     <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
                     <p className="text-4xl font-bold mb-6 text-purple-400">{plan.price}<span className="text-sm text-gray-400">/month</span></p>

@@ -54,9 +54,9 @@ function Login() {
               className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-white"
             >
               <option value="member">Admin</option>
-              <option value="trainer">Member</option>
+              {/* <option value="trainer">Member</option>
               <option value="sales">Trainer</option>
-              <option value="admin">Sales</option>
+              <option value="admin">Sales</option> */}
             </select>
           </div>
           <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
