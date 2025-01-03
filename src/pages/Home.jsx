@@ -3,7 +3,7 @@ import Hero from '../components/Hero';
 import ClassSlider from '../components/ClassSlider';
 import MembershipPlans from '../components/MembershipPlans';
 import About from './About';
-// import StatsSection from '../components/StatsSection';
+
 
 function Home() {
   return (
@@ -11,7 +11,7 @@ function Home() {
       <Hero />
       <ClassSlider />
       <About />
-      {/* <StatsSection /> */}
+  
       <MembershipPlans />
     </div>
   );
