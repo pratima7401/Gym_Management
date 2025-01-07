@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/lable'
@@ -10,25 +10,42 @@ function MemberRegistration() {
     phone: '',
     dob: '',
   });
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Store the form data in localStorage
-    localStorage.setItem('memberRegistration', JSON.stringify(formData));
-    // You can add additional logic here, such as sending the data to a server
-    console.log('Form submitted:', formData);
-    // Reset the form
-    setFormData({ name: '', email: '', phone: '', dob: '' });
+    try {
+      const response = await fetch('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (data.status === 'success') {
+        setMessage('Registration successful!');
+        setFormData({ name: '', email: '', phone: '', dob: '' });
+      } else {
+        setMessage('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage('An error occurred. Please try again later.');
+    }
   };
 
   return (
     <section className="py-16 bg-gray-800">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">Become a Member</h2>
+        {message && (
+          <p className="text-center mb-4 text-green-500">{message}</p>
+        )}
         <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
           <div className="mb-4">
             <Label htmlFor="name">Full Name</Label>
