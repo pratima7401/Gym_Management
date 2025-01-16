@@ -1,6 +1,6 @@
-// Import necessary dependencies and components
-
+// import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Classes from './pages/Classes';
@@ -10,28 +10,28 @@ import Shop from './pages/Shop';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 
-// Main App component
+// Set up Axios defaults
+axios.defaults.baseURL = 'http://localhost';
+
 function App() {
   return (
     <Router>
-      {/* Wrap the entire app in a dark-themed container */}
       <div className="App bg-gray-900 text-white min-h-screen">
-        {/* Use the Layout component to provide consistent structure */}
-        <Layout>
-          {/* Define routes for different pages */}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/plans" element={<Plans />} />
-            <Route path="/trainers" element={<Trainers />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/" element={<Layout><Home /></Layout>} />
+          <Route path="/classes" element={<Layout><Classes /></Layout>} />
+          <Route path="/plans" element={<Layout><Plans /></Layout>} />
+          <Route path="/trainers" element={<Layout><Trainers /></Layout>} />
+          <Route path="/shop" element={<Layout><Shop /></Layout>} />
+          <Route path="/about" element={<Layout><About /></Layout>} />
+          <Route path="/contact" element={<Layout><Contact /></Layout>} />
+          <Route path="/login" element={<Layout><Login /></Layout>} />
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Routes>
       </div>
     </Router>
   );

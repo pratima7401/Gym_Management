@@ -1,7 +1,8 @@
-import  { useState } from 'react';
-import { Button } from '../components/ui/button';
+import { useState } from 'react';
+import axios from 'axios';
+import {Button} from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/lable';
+import { Label } from '../components/ui/lable'; // Fixed import
 
 function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -16,29 +17,24 @@ function Contact() {
     setStatus('Sending...');
 
     try {
-      const response = await fetch('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'contact',
-          ...formData
-        }),
+      const response = await axios.post('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
+        type: 'contact',
+        ...formData,
       });
 
-      const data = await response.json();
-      console.log('Response:', data);
-
-      if (data.status === 'success') {
+      if (response.data.status === 'success') {
         setStatus('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
       } else {
-        setStatus(`Failed to send message: ${data.message}`);
+        setStatus(`Failed to send message: ${response.data.message}`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      setStatus('An error occurred. Please try again later.');
+      console.error('Error:', error.response || error.message);
+      setStatus(
+        error.response
+          ? `Error: ${error.response.data.message || 'Something went wrong!'}`
+          : 'An error occurred. Please try again later.'
+      );
     }
   };
 
@@ -59,21 +55,20 @@ function Contact() {
           <textarea
             id="message"
             rows="4"
-            className="w-full p-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full p-2 border text-black placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Your message here..."
             required
             value={formData.message}
             onChange={handleChange}
           ></textarea>
         </div>
-        <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+        <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all">
           Send Message
         </Button>
-        {status && <p className="mt-2 text-center">{status}</p>}
       </form>
+      {status && <p className="mt-2 text-center">{status}</p>}
     </div>
   );
 }
 
 export default Contact;
-
