@@ -16,15 +16,16 @@ function Contact() {
     setStatus('Sending...');
 
     try {
-      const response = await fetch('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
+      const response = await fetch('http://localhost/GYM/Gym_Management/src/components/htdocs/api.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        }
+        <body>
+        : JSON.stringify({
           type: 'contact',
           ...formData
-        }),
+        })
       });
 
       const data = await response.json();

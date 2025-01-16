@@ -19,7 +19,7 @@ function MemberRegistration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
+      const response = await fetch('http://localhost/GYM/Gym_Management/src/components/htdocs/api.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
