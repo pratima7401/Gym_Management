@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
+import { useState } from 'react';
+import {Button} from './ui/button';
 import heroImage from '../assets/back.jpg';
 import MemberRegistration from './MemberRegistration';
 

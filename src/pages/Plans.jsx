@@ -1,4 +1,4 @@
-import React from 'react';
+
 import MembershipPlans from '../components/MembershipPlans';
 
 function Plans() {

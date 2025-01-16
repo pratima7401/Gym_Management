@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ClassSlider from '../components/ClassSlider';
 
 function Classes() {

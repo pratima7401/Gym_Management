@@ -41,9 +41,9 @@ function Header() {
   ];
 
   const loginRoles = [
-    { name: 'Member', path: '/login?role=member' },
-    { name: 'Trainer', path: '/login?role=trainer' },
-    { name: 'Sales', path: '/login?role=sales' },
+    // { name: 'Member', path: '/login?role=member' },
+    // { name: 'Trainer', path: '/login?role=trainer' },
+    // { name: 'Sales', path: '/login?role=sales' },
     { name: 'Admin', path: '/login?role=admin' },
   ];
 

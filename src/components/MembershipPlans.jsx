@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from './ui/button';
+import  { useState, useEffect } from 'react';
+import {Button} from './ui/button';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 const plans = [
