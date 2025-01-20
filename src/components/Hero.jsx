@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
-import heroImage from '../assets/back.jpg';
+import heroImage from '../assets/Gymbgimage.jpg';
 import MemberRegistration from './MemberRegistration';
 
 function Hero() {
