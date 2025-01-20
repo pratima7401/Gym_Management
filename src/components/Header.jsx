@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Dumbbell, Menu, X, ChevronDown } from 'lucide-react';
 
@@ -41,9 +41,9 @@ function Header() {
   ];
 
   const loginRoles = [
-    { name: 'Member', path: '/login?role=member' },
-    { name: 'Trainer', path: '/login?role=trainer' },
-    { name: 'Sales', path: '/login?role=sales' },
+    // { name: 'Member', path: '/login?role=member' },
+    // { name: 'Trainer', path: '/login?role=trainer' },
+    // { name: 'Sales', path: '/login?role=sales' },
     { name: 'Admin', path: '/login?role=admin' },
   ];
 

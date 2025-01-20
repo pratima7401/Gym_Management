@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { ShoppingCart, Filter } from 'lucide-react';
-import { Button } from '../components/ui/button';
+import {Button} from '../components/ui/button';
 import equipment1 from '../assets/dumbel.jpg';
 import equipment2 from '../assets/bands.jpg';
 import equipment3 from '../assets/mats.jpg';

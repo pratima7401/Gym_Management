@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import { X } from 'lucide-react';
 
 import Female1 from '../assets/fe_trainer1.jpg';

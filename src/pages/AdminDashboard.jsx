@@ -1,244 +1,241 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { LayoutDashboard, Dumbbell, CreditCard, Users, ShoppingBag, Plus, Pencil, Trash, ToggleLeft, ToggleRight, LogOut } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { API_BASE_URL } from '../config';
+import { Input } from '../components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
+import { Label } from '../components/ui/label';
 
 function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('members');
-  const [members, setMembers] = useState([]);
-  const [plans, setPlans] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [data, setData] = useState([]);
+  const [editingItem, setEditingItem] = useState(null);
+  const [newItem, setNewItem] = useState({});
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const BASE_URL = 'http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=';
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      let response;
+      switch (activeTab) {
+        case 'classes':
+          response = await axios.get(`${BASE_URL}getClasses`);
+          break;
+        case 'plans':
+          response = await axios.get(`${BASE_URL}getMembershipPlans`);
+          break;
+        case 'trainers':
+          response = await axios.get(`${BASE_URL}getTrainers`);
+          break;
+        case 'products':
+          response = await axios.get(`${BASE_URL}getProducts`);
+          break;
+        case 'members':
+          response = await axios.get(`${BASE_URL}getMembers`);
+          break;
+        default:
+          setLoading(false);
+          return;
+      }
+      const responseData = Array.isArray(response.data) ? response.data : [];
+      setData(responseData);
+    } catch (error) {
+      console.error(`Error fetching ${activeTab}:`, error);
+      setError(`Failed to fetch ${activeTab}. Please try again later.`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, [activeTab]);
 
-  const fetchData = async () => {
+  const handleLogout = () => {
+    localStorage.removeItem('userToken');
+    sessionStorage.removeItem('userToken');
+    navigate('/login');
+  };
+
+  const handleEdit = (item) => {
+    setEditingItem(item);
+  };
+
+  const handleSave = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${activeTab}/`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const data = await response.json();
+      let action;
       switch (activeTab) {
-        case 'members':
-          setMembers(data);
+        case 'classes':
+          action = 'updateClass';
           break;
         case 'plans':
-          setPlans(data);
+          action = 'updatePlan';
           break;
-        case 'classes':
-          setClasses(data);
+        case 'trainers':
+          action = 'updateTrainer';
           break;
         case 'products':
-          setProducts(data);
+          action = 'updateProduct';
           break;
+        default:
+          return;
       }
+      await axios.post(`${BASE_URL}${action}`, editingItem);
+      setEditingItem(null);
+      fetchData();
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error updating item:', error);
     }
   };
 
-  const handleLogout = async () => {
+  const handleDelete = async (id) => {
     try {
-      await fetch(`${API_BASE_URL}/auth/logout/`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      navigate('/login');
+      let action;
+      switch (activeTab) {
+        case 'classes':
+          action = 'deleteClass';
+          break;
+        case 'plans':
+          action = 'deletePlan';
+          break;
+        case 'trainers':
+          action = 'deleteTrainer';
+          break;
+        case 'products':
+          action = 'deleteProduct';
+          break;
+        default:
+          return;
+      }
+      await axios.post(`${BASE_URL}${action}`, { id });
+      fetchData();
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error('Error deleting item:', error);
     }
   };
 
-  const handleAdd = async (type) => {
-    const name = prompt(`Enter ${type} name:`);
-    const description = prompt(`Enter ${type} description:`);
-    if (name && description) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/${type}/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({ name, description }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          fetchData();
-        } else {
-          alert(`Failed to add ${type}: ${data.message}`);
-        }
-      } catch (error) {
-        console.error('Error adding item:', error);
-        alert(`An error occurred while adding ${type}. Please try again.`);
-      }
-    }
-  };
-
-  const handleEdit = async (type, id) => {
-    const item = activeTab === 'members' ? members.find(m => m.id === id) :
-                 activeTab === 'plans' ? plans.find(p => p.id === id) :
-                 activeTab === 'classes' ? classes.find(c => c.id === id) :
-                 products.find(p => p.id === id);
-
-    const name = prompt(`Enter new ${type} name:`, item.name);
-    const description = prompt(`Enter new ${type} description:`, item.description);
-
-    if (name && description) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/${type}/${id}/`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({ name, description }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          fetchData();
-        } else {
-          alert(`Failed to update ${type}: ${data.message}`);
-        }
-      } catch (error) {
-        console.error('Error updating item:', error);
-        alert(`An error occurred while updating ${type}. Please try again.`);
-      }
-    }
-  };
-
-  const handleDelete = async (type, id) => {
-    if (window.confirm(`Are you sure you want to delete this ${type}?`)) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/${type}/${id}/`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (response.ok) {
-          fetchData();
-        } else {
-          const data = await response.json();
-          alert(`Failed to delete ${type}: ${data.message}`);
-        }
-      } catch (error) {
-        console.error('Error deleting item:', error);
-        alert(`An error occurred while deleting ${type}. Please try again.`);
-      }
-    }
-  };
-
-  const handleToggleStatus = async (type, id, currentStatus) => {
+  const handleToggleStatus = async (id, currentStatus) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${type}/${id}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ status: currentStatus === 'enabled' ? 'disabled' : 'enabled' }),
-      });
-      if (response.ok) {
-        fetchData();
-      } else {
-        const data = await response.json();
-        alert(`Failed to toggle status: ${data.message}`);
+      let action;
+      switch (activeTab) {
+        case 'classes':
+          action = 'toggleClassStatus';
+          break;
+        case 'plans':
+          action = 'togglePlanStatus';
+          break;
+        default:
+          return;
       }
+      await axios.post(`${BASE_URL}${action}`, { id, status: !currentStatus });
+      fetchData();
     } catch (error) {
       console.error('Error toggling status:', error);
-      alert('An error occurred while toggling status. Please try again.');
     }
   };
 
-  const renderContent = () => {
+  const handleAddItem = async () => {
+    try {
+      let action;
+      switch (activeTab) {
+        case 'classes':
+          action = 'addClass';
+          break;
+        case 'plans':
+          action = 'addPlan';
+          break;
+        case 'trainers':
+          action = 'addTrainer';
+          break;
+        case 'products':
+          action = 'addProduct';
+          break;
+        default:
+          return;
+      }
+      await axios.post(`${BASE_URL}${action}`, newItem);
+      setNewItem({});
+      setIsAddDialogOpen(false);
+      fetchData();
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
+  };
+
+  const renderTable = () => {
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+    if (!Array.isArray(data) || data.length === 0) return <p>No data available for {activeTab}.</p>;
+
+    let columns;
     switch (activeTab) {
-      case 'members':
-        return (
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((member) => (
-                <tr key={member.id}>
-                  <td>{member.name}</td>
-                  <td>{member.email}</td>
-                  <td>{member.phone}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
-      case 'plans':
       case 'classes':
+        columns = ['Name', 'Description', 'Duration', 'Capacity', 'Actions'];
+        break;
+      case 'plans':
+        columns = ['Name', 'Description', 'Price', 'Duration', 'Actions'];
+        break;
+      case 'members':
+        columns = ['ID', 'Name', 'Email', 'Phone', 'Date of Birth', 'Join_Date', 'Action'];
+        break;
+      case 'trainers':
+        columns = ['Name', 'Specialization', 'Experience', 'Actions'];
+        break;
       case 'products':
-        const items = activeTab === 'plans' ? plans : activeTab === 'classes' ? classes : products;
-        return (
-          <div>
-            <Button onClick={() => handleAdd(activeTab)} className="mb-4">Add New</Button>
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.description}</td>
-                    <td>{item.status}</td>
-                    <td>
-                      <Button onClick={() => handleEdit(activeTab, item.id)} className="mr-2">Edit</Button>
-                      <Button onClick={() => handleDelete(activeTab, item.id)} className="mr-2">Delete</Button>
-                      <Button onClick={() => handleToggleStatus(activeTab, item.id, item.status)}>
-                        {item.status === 'enabled' ? 'Disable' : 'Enable'}
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
+        columns = ['Name', 'Description', 'Price', 'Stock', 'Actions'];
+        break;
+      default:
+        return null;
     }
-  };
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-        <Button onClick={handleLogout} className="bg-red-600 hover:bg-red-700">
-          Logout
-        </Button>
-      </div>
-      <div className="mb-4">
-        <Button onClick={() => setActiveTab('members')} className={`mr-2 ${activeTab === 'members' ? 'bg-purple-600' : 'bg-gray-600'}`}>Members</Button>
-        <Button onClick={() => setActiveTab('plans')} className={`mr-2 ${activeTab === 'plans' ? 'bg-purple-600' : 'bg-gray-600'}`}>Plans</Button>
-        <Button onClick={() => setActiveTab('classes')} className={`mr-2 ${activeTab === 'classes' ? 'bg-purple-600' : 'bg-gray-600'}`}>Classes</Button>
-        <Button onClick={() => setActiveTab('products')} className={`mr-2 ${activeTab === 'products' ? 'bg-purple-600' : 'bg-gray-600'}`}>Shop Products</Button>
-      </div>
-      {renderContent()}
-    </div>
-  );
-}
-
-export default AdminDashboard;
-
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map((column, index) => (
+              <TableHead key={index}>{column}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={item.id || index}>
+              {columns.slice(0, -1).map((column, colIndex) => (
+                <TableCell key={colIndex}>
+                  {editingItem && editingItem.id === item.id ? (
+                    <Input
+                      value={editingItem[column.toLowerCase()] || ''}
+                      onChange={(e) =>
+                        setEditingItem({ ...editingItem, [column.toLowerCase()]: e.target.value })
+                      }
+                    />
+                  ) : (
+                    item[column.toLowerCase()] || ''
+                  )}
+                </TableCell>
+              ))}
+              <TableCell>
+                {editingItem && editingItem.id === item.id ? (
+                  <Button onClick={handleSave}>Save</Button>
+                ) : (
+                  <>
+                    <Button onClick={() => handleEdit(item)} className="mr-2">
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button onClick={() => handleDelete(item.id)} variant="destructive" className="mr-2">
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                    {(activeTab === 'classes' || activeTab === 'plans') && (
+                      <Button onClick={() => handleToggleStatus(item.id, item.is_active)}>
+                        {item.is_active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                      </Button>
+                    )}
+                 

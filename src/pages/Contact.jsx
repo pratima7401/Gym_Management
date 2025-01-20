@@ -1,47 +1,3 @@
-// import React from 'react';
-// import { Button } from '../components/ui/button';
-// import { Input } from '../components/ui/input';
-// import { Label } from '../components/ui/lable';
-
-// function Contact() {
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     // Handle form submission
-//     console.log('Form submitted');
-//   };
-
-//   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-4xl font-bold mb-8 text-center">Contact Us</h1>
-//       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-//         <div className="mb-4">
-//           <Label htmlFor="name">Name</Label>
-//           <Input type="text" id="name" placeholder="Your Name" required />
-//         </div>
-//         <div className="mb-4">
-//           <Label htmlFor="email">Email</Label>
-//           <Input type="email" id="email" placeholder="your@email.com" required />
-//         </div>
-//         <div className="mb-4">
-//           <Label htmlFor="message">Message</Label>
-//           <textarea
-//             id="message"
-//             rows="4"
-//             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-//             placeholder="Your message here..."
-//             required
-//           ></textarea>
-//         </div>
-//         <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-//           Send Message
-//         </Button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default Contact;
-
 import React, { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -63,14 +19,11 @@ function Contact() {
     try {
       const response = await fetch(`${API_BASE_URL}/contact/`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-
       if (response.ok) {
         setStatus('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
@@ -89,25 +42,42 @@ function Contact() {
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
           <Label htmlFor="name">Name</Label>
-          <Input type="text" id="name" placeholder="Your Name" required value={formData.name} onChange={handleChange} />
+          <Input
+            type="text"
+            id="name"
+            placeholder="Your Name"
+            required
+            value={formData.name}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="your@email.com" required value={formData.email} onChange={handleChange} />
+          <Input
+            type="email"
+            id="email"
+            placeholder="your@email.com"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="message">Message</Label>
           <textarea
             id="message"
             rows="4"
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full p-2 border text-black placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Your message here..."
             required
             value={formData.message}
             onChange={handleChange}
           ></textarea>
         </div>
-        <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+        <Button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
           Send Message
         </Button>
         {status && <p className="mt-2 text-center">{status}</p>}
@@ -117,4 +87,3 @@ function Contact() {
 }
 
 export default Contact;
-
