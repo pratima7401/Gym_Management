@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LayoutDashboard, Dumbbell, CreditCard, Users, ShoppingBag, Plus, Pencil, Trash, ToggleLeft, ToggleRight, LogOut  } from 'lucide-react';
-import {Button} from '../components/ui/button';
+import { LayoutDashboard, Dumbbell, CreditCard, Users, ShoppingBag, Plus, Pencil, Trash, ToggleLeft, ToggleRight, LogOut } from 'lucide-react';
+import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { Label } from '../components/ui/lable';
+import { Label } from '../components/ui/label';
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,10 +17,6 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
 
   const BASE_URL = 'http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=';
 
@@ -33,7 +29,7 @@ function AdminDashboard() {
         case 'classes':
           response = await axios.get(`${BASE_URL}getClasses`);
           break;
-        case 'getMembershipPlans':
+        case 'plans':
           response = await axios.get(`${BASE_URL}getMembershipPlans`);
           break;
         case 'trainers':
@@ -49,10 +45,8 @@ function AdminDashboard() {
           setLoading(false);
           return;
       }
-  
-      // Check if response data is an array
       const responseData = Array.isArray(response.data) ? response.data : [];
-      setData(responseData);  // Ensure that `data` is always an array
+      setData(responseData);
     } catch (error) {
       console.error(`Error fetching ${activeTab}:`, error);
       setError(`Failed to fetch ${activeTab}. Please try again later.`);
@@ -60,20 +54,16 @@ function AdminDashboard() {
       setLoading(false);
     }
   };
-  
+
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
 
   const handleLogout = () => {
-    // Clear the session data (like token, user info, etc.)
     localStorage.removeItem('userToken');
     sessionStorage.removeItem('userToken');
-    
-    // Optionally clear any global state
-    // Dispatch a logout action if using redux or context
-
-    // Redirect to the login page (or home page)
-    navigate('/login'); // Use navigate() instead of history.push()
+    navigate('/login');
   };
-  
 
   const handleEdit = (item) => {
     setEditingItem(item);
@@ -98,7 +88,7 @@ function AdminDashboard() {
         default:
           return;
       }
-      await axios.post(`http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=${action}`, editingItem);
+      await axios.post(`${BASE_URL}${action}`, editingItem);
       setEditingItem(null);
       fetchData();
     } catch (error) {
@@ -125,7 +115,7 @@ function AdminDashboard() {
         default:
           return;
       }
-      await axios.post(`http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=${action}`, { id });
+      await axios.post(`${BASE_URL}${action}`, { id });
       fetchData();
     } catch (error) {
       console.error('Error deleting item:', error);
@@ -145,7 +135,7 @@ function AdminDashboard() {
         default:
           return;
       }
-      await axios.post(`http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=${action}`, { id, status: !currentStatus });
+      await axios.post(`${BASE_URL}${action}`, { id, status: !currentStatus });
       fetchData();
     } catch (error) {
       console.error('Error toggling status:', error);
@@ -171,7 +161,7 @@ function AdminDashboard() {
         default:
           return;
       }
-      await axios.post(`http://localhost/React/Projects/gym_app/src/components/htdocs/api.php?action=${action}`, newItem);
+      await axios.post(`${BASE_URL}${action}`, newItem);
       setNewItem({});
       setIsAddDialogOpen(false);
       fetchData();
@@ -184,7 +174,7 @@ function AdminDashboard() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p className="text-red-500">{error}</p>;
     if (!Array.isArray(data) || data.length === 0) return <p>No data available for {activeTab}.</p>;
-  
+
     let columns;
     switch (activeTab) {
       case 'classes':
@@ -205,7 +195,7 @@ function AdminDashboard() {
       default:
         return null;
     }
-  
+
     return (
       <Table>
         <TableHeader>
@@ -248,144 +238,4 @@ function AdminDashboard() {
                         {item.is_active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
                       </Button>
                     )}
-                  </>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  };
-  
-  
-  const renderAddDialog = () => {
-    let fields;
-    switch (activeTab) {
-      case 'classes':
-        fields = ['name', 'description', 'duration', 'capacity'];
-        break;
-      case 'plans':
-        fields = ['name', 'description', 'price', 'duration'];
-        break;
-      case 'trainers':
-        fields = ['name', 'specialization', 'experience'];
-        break;
-      case 'products':
-        fields = ['name', 'description', 'price', 'stock'];
-        break;
-      default:
-        return null;
-    }
-
-    return (
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogTrigger asChild>
-          <Button className="mb-4">
-            <Plus className="w-4 h-4 mr-2" /> Add New
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New {activeTab.slice(0, -1)}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            {fields.map((field) => (
-              <div key={field} className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor={field} className="text-right">
-                  {field.charAt(0).toUpperCase() + field.slice(1)}
-                </Label>
-                <Input
-                  id={field}
-                  value={newItem[field] || ''}
-                  onChange={(e) => setNewItem({ ...newItem, [field]: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-            ))}
-          </div>
-          <Button onClick={handleAddItem}>Add</Button>
-        </DialogContent>
-      </Dialog>
-    );
-  };
-
-  const renderDashboard = () => (
-    <div className="bg-purple-500 p-6 rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Welcome Admin!</h2>
-      {/* <p>Select a category from the sidebar to manage gym data.</p> */}
-
-    </div>
-  );
-
-  return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-6">
-        <h2 className="text-2xl font-semibold mb-6">Admin Dashboard</h2>
-        <nav>
-          <ul className="space-y-2">
-            <li>
-              <button onClick={() => setActiveTab('dashboard')} className="flex  items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <LayoutDashboard className="mr-2" />
-                Dashboard
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setActiveTab('classes')} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <Dumbbell className="mr-2" />
-                Classes
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setActiveTab('plans')} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <CreditCard className="mr-2" />
-                Plans
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setActiveTab('members')} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <Users className="mr-2" />
-                Members
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setActiveTab('trainers')} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <Users className="mr-2" />
-                Trainers
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setActiveTab('products')} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left">
-                <ShoppingBag className="mr-2" />
-                Shop Products
-              </button>
-            </li>
-            <li>
-              <button onClick={handleLogout} className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left mt-6">
-                <LogOut className="mr-2" />
-                Logout
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main content area */}
-      <main className="flex-1 p-6 overflow-y-auto">
-        {activeTab === 'dashboard' ? (
-          renderDashboard()
-        ) : (
-          <div className="bg-purple-500 h-screen p-7 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Management</h2>
-            {renderAddDialog()}
-            {renderTable()}
-          </div>
-        )}
-      </main>
-    </div>
-  );
-}
-
-export default AdminDashboard;
-
+                 

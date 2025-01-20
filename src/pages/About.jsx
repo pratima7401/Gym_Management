@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dumbbell, Users, Award, Clock, ChevronRight } from 'lucide-react';
 import CountUp from 'react-countup';
@@ -32,6 +32,63 @@ const activities = [
   { name: 'Cardio Classes', video: cardioVideo },
 ];
 
+const Stats = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const statsRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => {
+      if (statsRef.current) {
+        observer.unobserve(statsRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <section className="py-16 bg-gray-800" ref={statsRef}>
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat, index) => (
+            <motion.div 
+              key={index} 
+              className="text-center"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="flex justify-center mb-2">{stat.icon}</div>
+              <div className="text-3xl font-bold text-purple-400">
+                {isVisible && (
+                  <CountUp 
+                    end={stat.value} 
+                    duration={2.5}
+                    suffix={stat.suffix}
+                  />
+                )}
+              </div>
+              <div className="text-gray-400">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 function About() {
   return (
     <div className="bg-gray-900 text-white">
@@ -55,6 +112,9 @@ function About() {
       </section>
 
       {/* Stats Section */}
+<<<<<<< HEAD
+      <Stats />
+=======
       <section className="py-16 bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -82,6 +142,7 @@ function About() {
           </div>
         </div>
       </section>
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
 
       {/* Main Content Section */}
       <section className="py-16">

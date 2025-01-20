@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import {Button} from './ui/button';
-import heroImage from '../assets/back.jpg';
+import React, { useState } from 'react';
+import { Button } from './ui/button';
+import heroImage from '../assets/Gymbgimage.jpg'; // From pankaj: hero image updated
 import MemberRegistration from './MemberRegistration';
 
 function Hero() {
@@ -69,4 +69,3 @@ function Hero() {
 }
 
 export default Hero;
-

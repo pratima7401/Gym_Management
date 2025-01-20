@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import axios from 'axios';
-import {Button} from '../components/ui/button';
+import React, { useState } from 'react';
+import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/lable'; // Fixed import
+import { Label } from '../components/ui/lable';
+import { API_BASE_URL } from '../config';
 
 function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -17,24 +17,22 @@ function Contact() {
     setStatus('Sending...');
 
     try {
-      const response = await axios.post('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
-        type: 'contact',
-        ...formData,
+      const response = await fetch(`${API_BASE_URL}/contact/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
-      if (response.data.status === 'success') {
+      const data = await response.json();
+      if (response.ok) {
         setStatus('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
       } else {
-        setStatus(`Failed to send message: ${response.data.message}`);
+        setStatus(`Failed to send message: ${data.message}`);
       }
     } catch (error) {
-      console.error('Error:', error.response || error.message);
-      setStatus(
-        error.response
-          ? `Error: ${error.response.data.message || 'Something went wrong!'}`
-          : 'An error occurred. Please try again later.'
-      );
+      console.error('Error:', error);
+      setStatus('An error occurred. Please try again later.');
     }
   };
 
@@ -44,11 +42,25 @@ function Contact() {
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
           <Label htmlFor="name">Name</Label>
-          <Input type="text" id="name" placeholder="Your Name" required value={formData.name} onChange={handleChange} />
+          <Input
+            type="text"
+            id="name"
+            placeholder="Your Name"
+            required
+            value={formData.name}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="your@email.com" required value={formData.email} onChange={handleChange} />
+          <Input
+            type="email"
+            id="email"
+            placeholder="your@email.com"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="message">Message</Label>
@@ -62,11 +74,14 @@ function Contact() {
             onChange={handleChange}
           ></textarea>
         </div>
-        <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all">
+        <Button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
           Send Message
         </Button>
+        {status && <p className="mt-2 text-center">{status}</p>}
       </form>
-      {status && <p className="mt-2 text-center">{status}</p>}
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/lable'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { RadioGroup, RadioGroupItem } from './ui/radio-group'
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/lable';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 function MemberRegistration() {
   const [formData, setFormData] = useState({
@@ -16,6 +16,7 @@ function MemberRegistration() {
     gender: '',
     planId: '',
   });
+
   const [status, setStatus] = useState('');
   const [plans, setPlans] = useState([]);
 
@@ -191,4 +192,3 @@ function MemberRegistration() {
 }
 
 export default MemberRegistration;
-
