@@ -112,7 +112,37 @@ function About() {
       </section>
 
       {/* Stats Section */}
+<<<<<<< HEAD
       <Stats />
+=======
+      <section className="py-16 bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div 
+                key={index} 
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="flex justify-center mb-2">{stat.icon}</div>
+                <div className="text-3xl font-bold text-purple-400">
+                  <CountUp 
+                    end={stat.value} 
+                    duration={2.5}
+                    suffix={stat.suffix}
+                    enableScrollSpy
+                    scrollSpyOnce
+                  />
+                </div>
+                <div className="text-gray-400">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
 
       {/* Main Content Section */}
       <section className="py-16">

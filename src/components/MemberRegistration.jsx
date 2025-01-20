@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import React, { useState, useRef, useEffect } from 'react';
 // import { Button } from './ui/button'
 // import { Input } from './ui/input'
@@ -147,6 +148,9 @@
 // export default MemberRegistration;
 
 import React, { useState, useRef, useEffect } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/lable'
@@ -160,6 +164,7 @@ function MemberRegistration() {
     phone: '',
     dob: '',
   });
+<<<<<<< HEAD
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -186,11 +191,14 @@ function MemberRegistration() {
       }
     };
   }, []);
+=======
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+<<<<<<< HEAD
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -215,11 +223,22 @@ function MemberRegistration() {
       console.error('Error:', error);
       setError('An error occurred. Please try again later.');
     }
+=======
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Store the form data in localStorage
+    localStorage.setItem('memberRegistration', JSON.stringify(formData));
+    // You can add additional logic here, such as sending the data to a server
+    console.log('Form submitted:', formData);
+    // Reset the form
+    setFormData({ name: '', email: '', phone: '', dob: '' });
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
   };
 
   return (
     <section className="py-16 bg-gray-800" ref={containerRef}>
       <div className="container mx-auto">
+<<<<<<< HEAD
         <h2 className="text-3xl font-bold mb-8 text-center text-white">Become a Member</h2>
         {isVisible && (
           <div className="text-center mb-8">
@@ -232,6 +251,10 @@ function MemberRegistration() {
         <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
           {error && <div className="mb-4 text-red-500">{error}</div>}
           {success && <div className="mb-4 text-green-500">{success}</div>}
+=======
+        <h2 className="text-3xl font-bold mb-8 text-center">Become a Member</h2>
+        <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+>>>>>>> 5f26fae295e4a7be015db3b0f7d374a500d4c81b
           <div className="mb-4">
             <Label htmlFor="name">Full Name</Label>
             <Input 
