@@ -10,12 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@radix-ui/react-slot": "^1.1.1",
-=======
     "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@react-google-maps/api": "^2.20.5",
     "axios": "^1.7.9",
->>>>>>> 7ed5821d01b3c09ed97f2e6bb75f1d375353335f
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
@@ -24,10 +22,7 @@
     "react-countup": "^6.5.3",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.1",
-<<<<<<< HEAD
-=======
     "recharts": "^2.15.0",
->>>>>>> 7ed5821d01b3c09ed97f2e6bb75f1d375353335f
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {

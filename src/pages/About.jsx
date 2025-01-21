@@ -43,13 +43,15 @@ function About() {
             className="text-5xl font-bold mb-4 text-center"
             {...fadeIn}
           >
-            About FitForge
+            About SetFeet
           </motion.h1>
           <motion.p 
             className="text-xl text-center max-w-3xl mx-auto"
             {...fadeIn}
           >
-            Empowering individuals to forge their best selves through fitness, community, and expert guidance.
+
+       SetFeet is dedicated to helping you achieve your fitness goals with a range of services, expert trainers, and a supportive community. Join us and start your journey towards a healthier lifestyle!
+       Feel free to adjust any sections to better fit your gym’s unique identity!
           </motion.p>
         </div>
       </section>

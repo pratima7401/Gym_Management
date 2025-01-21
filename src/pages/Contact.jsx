@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
-import {Button} from '../components/ui/button';
+import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/lable'; // Fixed import
+import { Label } from '../components/ui/label';
 
 function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -17,32 +16,27 @@ function Contact() {
     setStatus('Sending...');
 
     try {
-<<<<<<< HEAD
-      const response = await fetch('http://localhost/GYM/Gym_Management/src/components/htdocs/api.php', {
+      const response = await fetch('http://localhost/GYM/Gym_Management', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        }
-        <body>
-        : JSON.stringify({
+        },
+        body: JSON.stringify({
           type: 'contact',
-          ...formData
-        })
-=======
-      const response = await axios.post('http://localhost/React/Projects/gym_app/src/components/htdocs/api.php', {
-        type: 'contact',
-        ...formData,
->>>>>>> 7ed5821d01b3c09ed97f2e6bb75f1d375353335f
+          ...formData,
+        }),
       });
 
-      if (response.data.status === 'success') {
+      const data = await response.json(); // Correctly parse the response
+
+      if (data.status === 'success') {
         setStatus('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
       } else {
-        setStatus(`Failed to send message: ${response.data.message}`);
+        setStatus(`Failed to send message: ${data.message}`);
       }
     } catch (error) {
-      console.error('Error:', error.response || error.message);
+      console.error('Error:', error);
       setStatus(
         error.response
           ? `Error: ${error.response.data.message || 'Something went wrong!'}`
@@ -57,11 +51,25 @@ function Contact() {
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
           <Label htmlFor="name">Name</Label>
-          <Input type="text" id="name" placeholder="Your Name" required value={formData.name} onChange={handleChange} />
+          <Input
+            type="text"
+            id="name"
+            placeholder="Your Name"
+            required
+            value={formData.name}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="your@email.com" required value={formData.email} onChange={handleChange} />
+          <Input
+            type="email"
+            id="email"
+            placeholder="your@email.com"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-4">
           <Label htmlFor="message">Message</Label>
@@ -75,7 +83,10 @@ function Contact() {
             onChange={handleChange}
           ></textarea>
         </div>
-        <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all">
+        <Button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 font-semibold py-3 px-2 rounded-lg shadow-md hover:shadow-lg transition-all"
+        >
           Send Message
         </Button>
       </form>

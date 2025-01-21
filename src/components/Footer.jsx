@@ -43,6 +43,18 @@ function Footer() {
                 (555) 123-4567
               </li>
             </ul>
+            {/* Google Map Embed */}
+            <div className="mt-4">
+              <iframe
+                title="Google Map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.9587635514495!2d73.81463857379971!3d18.48552697024649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bfdde729d09d%3A0x227e144cda1b0c11!2sShahu%20Colony%20Lane%20Number%203A%2C%20Karve%20Nagar%2C%20Pune%2C%20Maharashtra%20411052!5e0!3m2!1sen!2sin!4v1737445112195!5m2!1sen!2sin"
+                width="100%"
+                height="200"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+            </div>
           </div>
 
           {/* Column 4: Social Media */}
@@ -72,4 +84,3 @@ function Footer() {
 }
 
 export default Footer;
-

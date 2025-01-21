@@ -38,6 +38,7 @@ function Header() {
     { name: 'Shop', path: '/shop' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
+   
   ];
 
   const loginRoles = [
@@ -53,7 +54,7 @@ function Header() {
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
             <Dumbbell className="h-8 w-8 text-purple-500 mr-2" />
-            <span className="text-2xl font-bold text-white">FitForge</span>
+            <span className="text-2xl font-bold text-white">SetFeet</span>
           </Link>
           <nav className="hidden md:flex space-x-6">
             {navItems.map((item) => (

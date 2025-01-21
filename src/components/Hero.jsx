@@ -1,9 +1,18 @@
-import { useState } from 'react';
-import {Button} from './ui/button';
-import heroImage from '../assets/back.jpg';
+import { useState, useEffect } from 'react';
+import { Button } from './ui/button';
 import MemberRegistration from './MemberRegistration';
 
+// Array of background images
+const images = [
+  '/src/assets/image1.webp',
+  '/src/assets/image2.webp',
+  '/src/assets/image3.webp',
+]; // Replace these paths with your actual image paths
+
 function Hero() {
+  // State for the background image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   // State to control the visibility of the registration modal
   const [showModal, setShowModal] = useState(false);
 
@@ -17,17 +26,27 @@ function Hero() {
     setShowModal(false);
   };
 
+  // Change background image every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000);
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
+
   return (
     <div className="relative h-screen flex items-center bg-gradient-to-b from-gray-900 to-purple-900">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
+      {/* Background image slideshow */}
+      <div className="absolute inset-0 transition-opacity duration-1000">
         <img
-          src={heroImage}
+          src={images[currentImageIndex]}
           alt="Fitness model"
           className="w-full h-full object-cover opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-transparent"></div>
       </div>
+
       {/* Hero content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl">
@@ -42,12 +61,13 @@ function Hero() {
           </p>
           <Button
             size="lg"
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded animate-bounce"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleGetStartedClick}
           >
             Get Started
           </Button>
         </div>
+        
         {/* Registration modal */}
         {showModal && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-30">
@@ -69,4 +89,3 @@ function Hero() {
 }
 
 export default Hero;
-
