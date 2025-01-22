@@ -1,106 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from './ui/button';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 const plans = [
   {
-    name: 'Basic',
-    price: '$29.99',
+    name: 'Monthly Plan',
+    premiumLabel: '✨ Starter',
+    price: '₹1800',
+    duration: '1 Month',
     features: ['Access to gym equipment', 'Locker room access', 'Free weights area'],
+    color: 'bg-white', // White background
+    textColor: 'text-gray-900', // Dark text color for visibility on white
   },
   {
-    name: 'Premium',
-    price: '$49.99',
-    features: ['All Basic features', 'Group fitness classes', 'Personal trainer (1 session/month)'],
+    name: 'Quarterly Plan',
+    premiumLabel: '🏆 Silver',
+    price: '₹3800',
+    duration: '3 Months',
+    features: ['All Monthly features', 'Group fitness classes'],
+    color: 'bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500', // Lighter silver
+    textColor: 'text-gray-900', // Dark text for contrast
   },
   {
-    name: 'Elite',
-    price: '$79.99',
-    features: ['All Premium features', 'Unlimited personal training', 'Nutrition consultation'],
+    name: 'Termly Plan',
+    premiumLabel: '🥉 Bronze',
+    price: '₹5500',
+    duration: '6 Months',
+    features: ['All Quarterly features', 'Personal trainer (2 sessions/month)'],
+    color: 'bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-700', // Lighter bronze
+    textColor: 'text-white', // White text for contrast on bronze
   },
   {
-    name: 'Student',
-    price: '$19.99',
-    features: ['Access to gym equipment', 'Locker room access', 'Discounted group classes'],
-  },
-  {
-    name: 'Family',
-    price: '$99.99',
-    features: ['Access for up to 4 family members', 'All Premium features', 'Childcare services'],
-  },
-  {
-    name: 'Corporate',
-    price: '$59.99',
-    features: ['All Premium features', 'Team building sessions', 'Workplace wellness programs'],
+    name: 'Annual Plan',
+    premiumLabel: '👑 Golden',
+    price: '₹8000',
+    duration: '12 Months',
+    features: ['All Termly features', 'Unlimited personal training', 'Nutrition consultation'],
+    color: 'bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700', // Brighter gold
+    textColor: 'text-white', // White text for contrast on gold
   },
 ];
 
 function MembershipPlans() {
-  const [startIndex, setStartIndex] = useState(0);
-  const visiblePlans = 3;
-  const totalPlans = plans.length;
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setStartIndex((prevIndex) => (prevIndex + 1) % totalPlans);
-    }, 1000); // Change slide every 1 seconds
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => {
-    setStartIndex((prevIndex) => (prevIndex + 1) % totalPlans);
-  };
-
-  const prevSlide = () => {
-    setStartIndex((prevIndex) => (prevIndex - 1 + totalPlans) % totalPlans);
+  const handlePlanClick = (index) => {
+    setSelectedPlan(index);
   };
 
   return (
     <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center text-white">Membership Plans</h2>
-        <div className="relative">
-          <button 
-            onClick={prevSlide} 
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
-            aria-label="Previous plans"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button 
-            onClick={nextSlide} 
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
-            aria-label="Next plans"
-          >
-            <ChevronRight size={24} />
-          </button>
-          <div className="overflow-hidden">
-            <div 
-              className="flex transition-transform duration-300 ease-in-out"
-              style={{ transform: `translateX(-${startIndex * (100 / visiblePlans)}%)` }}
+        <h2 className="text-5xl font-extrabold mb-12 text-center text-white animate-hover">Explore Membership Plans</h2>
+        <div className="relative flex flex-wrap justify-center items-center gap-8">
+          {plans.map((plan, index) => (
+            <div
+              key={index}
+              onMouseEnter={() => setSelectedPlan(index)}
+              onMouseLeave={() => setSelectedPlan(null)}
+              onClick={() => handlePlanClick(index)}
+              className={`relative transition-all duration-300 transform ${
+                selectedPlan === index ? 'scale-105 z-10 shadow-2xl' : 'scale-95 opacity-90'
+              } ${plan.color} w-72 rounded-lg p-6 shadow-lg cursor-pointer hover:scale-105 hover:shadow-2xl hover:opacity-100 hover:ring-2 hover:ring-white hover:ring-opacity-60`}
             >
-              {[...plans, ...plans].map((plan, index) => (
-                <div key={index} className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4">
-                  <div className="bg-gray-800 rounded-lg p-8 shadow-lg h-full flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl">
-                    <h3 className="text-2xl font-bold mb-4 text-white">{plan.name}</h3>
-                    <p className="text-4xl font-bold mb-6 text-purple-400">{plan.price}<span className="text-sm text-gray-400">/month</span></p>
-                    <ul className="mb-8 flex-grow">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="mb-2 flex items-center text-gray-300">
-                          <Check className="h-5 w-5 text-green-500 mr-2" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-                      Choose Plan
-                    </Button>
-                  </div>
+              {selectedPlan === index && (
+                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black text-lg font-bold py-1 px-3 rounded-full shadow-md">
+                  {plan.premiumLabel}
                 </div>
-              ))}
+              )}
+              <h3 className={`text-2xl font-bold mb-4 text-center ${plan.textColor}`}>{plan.name}</h3>
+              <p className={`text-4xl font-bold mb-6 text-center ${plan.textColor}`}>
+                {plan.price} <span className="text-sm text-gray-200">/{plan.duration}</span>
+              </p>
+              <ul className="mb-8">
+                {plan.features.map((feature, i) => (
+                  <li key={i} className={`mb-2 flex items-center ${plan.textColor}`}>
+                    <Check className="h-5 w-5 text-green-400 mr-2" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded">
+                Choose Plan
+              </Button>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -108,4 +92,3 @@ function MembershipPlans() {
 }
 
 export default MembershipPlans;
-

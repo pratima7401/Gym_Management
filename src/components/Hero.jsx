@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
-import heroImage from '../assets/back.jpg';
 import MemberRegistration from './MemberRegistration';
+import '../styles/Hero.css';
+
+// Import images from the assets folder
+import heroImage1 from '../assets/Gymbgimage1.jpg';
+import heroImage2 from '../assets/Gymbgimage2.jpg';
+import heroImage3 from '../assets/Gymbgimage3.jpg';
 
 function Hero() {
   // State to control the visibility of the registration modal
@@ -18,18 +23,15 @@ function Hero() {
   };
 
   return (
-    <div className="relative h-screen flex items-center bg-gradient-to-b from-gray-900 to-purple-900">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Fitness model"
-          className="w-full h-full object-cover opacity-50"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-transparent"></div>
+    <div className="relative h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-purple-900">
+      {/* Background sliding effect */}
+      <div className="absolute inset-0 bg-cover bg-fixed animate-slideBackground">
+        {/* This will make the background images slide */}
+        <img src={heroImage2} className='w-full h-full'/>
       </div>
+
       {/* Hero content */}
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 text-center">
         <div className="max-w-2xl">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white animate-pulse">
             Transform Your Body,{' '}
@@ -42,7 +44,7 @@ function Hero() {
           </p>
           <Button
             size="lg"
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded animate-bounce"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleGetStartedClick}
           >
             Get Started
@@ -69,4 +71,3 @@ function Hero() {
 }
 
 export default Hero;
-
